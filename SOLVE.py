@@ -115,8 +115,11 @@ class getFcInfo:
                 else:
                      listThatWillBePosted.append(formatMessage[entry])
         print(listThatWillBePosted)
+        for  i in range(10):
+            listThatWillBePosted.append("")
         for i in range(len(listThatWillBePosted)):
             self.fcSheetFile.update_cell(i+1,index,listThatWillBePosted[i])
+            
 
 fcSheet = getFcInfo(["https://spreadsheets.google.com/feeds",'https://www.googleapis.com/auth/spreadsheets',
                      "https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"],
