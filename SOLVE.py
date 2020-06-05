@@ -40,7 +40,7 @@ class getFcInfo:
         self.fcSheetFile.insert_row(listOfMembers)
     def updateCol(self,nameOfUser, restOfTheMessage):
         #-- example message: Jane Grande 1 x pc ShadowBringers Tank Dps
-        formatMessage = {"ff14name":"","amountOfChars":0,"altWorld":False,"platform":"pc","arr":False,
+        formatMessage = {"ff14name":"","amountOfChars":0,"altWorld":False,"platform":"","arr":False,
                          "hw":False,"sb":False,"shb":False, "lvl80DOl":False,"lvl80DOH":False,"lvl80TANK":False,"lvl80HEALER":False,"lvl80DPS":False}
 
         for i, word in enumerate(restOfTheMessage.split(" ")):
@@ -59,10 +59,10 @@ class getFcInfo:
                     elif word == "v":
                          formatMessage["altWorld"] = True
                 if i == 4:
-                    if word == "PC":
+                    if word.lower() == "pc":
                         formatMessage["platform"] = "pc"
-                    elif word == "ps4":
-                         formatMessage["altWorld"] = "ps4"
+                    elif word.lower() == "ps4":
+                         formatMessage["platform"] = "ps4"
 
         restOfTheMessage = restOfTheMessage.lower()
         if "shadowbringer" in restOfTheMessage:
@@ -127,8 +127,9 @@ fcSheet = getFcInfo(["https://spreadsheets.google.com/feeds",'https://www.google
 @fcSheet.client_discord.event
 async def on_message(message):
     print(message.channel)
+    print(message.author)
     print(message.content)
-    if message.author == fcSheet.client_discord.user and  message.channel != "bot":
+    if message.author == fcSheet.client_discord.user and  message.channel != "bot-test-channel":
         return
     # -- what to do with the bot
     if message.content.startswith("!getList"):
@@ -143,7 +144,7 @@ async def on_message(message):
         pprint(fcSheet.updateCol(message.author, restOfMessage))
     if message.content.startswith("!help"):
         await message.channel.send("message format is:")
-        await message.channel.send("***___!updateMe firstName lastName AmountOfCharacters ifYouGotACharOnADifferentServerOrDataCenter(x/v) pc/ps4 latestExpansionYouOwn(ShadowBringers/stormblood/heavensward/aRealReborn) Tank or Dps or healer or doh or dol (type all that you got at 80)___***")
+        await message.channel.send("***___!updateMe (firstName) (lastName) (AmountOfCharacters) (ifYouGotACharOnADifferentServerOrDataCenter(x/v) ) (pc/ps4) (latestExpansionYouOwn(ShadowBringers/stormblood/heavensward/aRealReborn) ) (Tank or Dps or healer or doh or dol (type all that you got at 80, without '()' ) )___***")
         await message.channel.send("Example:")
         await message.channel.send("!updateMe Jane Grande 1 x pc ShadowBringers Tank Dps DoL healer DOH")
 
